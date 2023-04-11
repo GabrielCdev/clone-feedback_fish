@@ -1,24 +1,41 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+const HomeView = () => import('../views/Home/HomeView.vue')
+const FeedbacksView = () => import('../views/Feedbacks/FeedbacksView.vue')
+const CredentialsView = () =>
+  import('../views/Credentials/CredentialsView.vue')
 
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/feedbacks',
+    name: 'Feedbacks',
+    component: FeedbacksView,
+    meta: {
+      hasAuth: true
+    }
+  },
+  {
+    path: '/credentials',
+    name: 'Credentials',
+    component: CredentialsView,
+    meta: {
+      hasAuth: true
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*', // Regex do Vue Router para caso caia em qualquer rota não definida acima, enviar um redirect
+    redirect: { name: 'Home' }
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory('/'),
   routes
 })
 
