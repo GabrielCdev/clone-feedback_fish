@@ -1,9 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+const palette = require('./palette')
+
 module.exports = {
-  content: [],
+  content: ["./src/**/*.{html,js}"],
   presets: [],
   darkMode: 'media', // or 'class'
   theme: {
+    extend: {
+      collors: palette
+    },
     accentColor: ({ theme }) => ({
       ...theme('colors'),
       auto: 'auto',
@@ -300,6 +305,10 @@ module.exports = {
       DEFAULT: '1',
     },
     fontFamily: {
+      regular: ['RobotoRegular'],
+      medium: ['RobotoMedium'],
+      bold: ['RobotoBold'],
+      black: ['RobotoBlack'],
       sans: [
         'ui-sans-serif',
         'system-ui',

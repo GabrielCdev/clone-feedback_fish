@@ -1,5 +1,5 @@
 <template>
-  <h1>HOME</h1>
+  <h1 class="font-black text-brand-main">TELA HOME</h1>
 </template>
 
 <script>
