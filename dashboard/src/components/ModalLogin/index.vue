@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="flex justify-beetwen">
+  <div class="flex justify-between">
     <h1 class="text-4xl font-black text-gray-800">Entre na sua conta</h1>
     <button @click="close" class="text-4xl text-gray-600 focus:outline-none">&times;</button>
   </div>
@@ -22,7 +22,7 @@
         <span v-if="!!state.email.errorMessage" class="block font-medium text-brand-danger">{{ state.email.errorMessage }}</span>
       </label>
 
-      <label class="block">
+      <label class="block mt-9">
         <span class="text-lg font-medium text-gray-800">Senha</span>
         <input
           v-model="state.password.value"
@@ -52,22 +52,34 @@
 
 <script>
 import { reactive } from 'vue'
+import { useField } from 'vee-validate'
 import useModal from '@/hooks/useModal'
+import { validateEmptyAndLength3, validateEmptyAndEmail } from '@/utils/validators'
 
 export default {
   setup () {
     const modal = useModal()
 
+    const {
+      value: emailValue,
+      errorMessage: emailErrorMessage
+    } = useField('email', validateEmptyAndEmail)
+
+    const {
+      value: passwordValue,
+      errorMessage: passwordErrorMessage
+    } = useField('password', validateEmptyAndLength3)
+
     const state = reactive({
       hasErrors: false, // hasErros pq há requisições para API (para saber se o user tá logado ou não)
       isLoading: false,
       email: {
-        value: '',
-        errorMessage: ''
+        value: emailValue,
+        errorMessage: emailErrorMessage
       },
       password: {
-        value: '',
-        errorMessage: ''
+        value: passwordValue,
+        errorMessage: passwordErrorMessage
       }
     })
 
