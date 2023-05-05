@@ -52,13 +52,16 @@
 
 <script>
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useField } from 'vee-validate'
 import useModal from '@/hooks/useModal'
 import { validateEmptyAndLength3, validateEmptyAndEmail } from '@/utils/validators'
+import services from '@/services'
 
 export default {
   setup () {
     const modal = useModal()
+    const router = useRouter()
 
     const {
       value: emailValue,
@@ -83,7 +86,38 @@ export default {
       }
     })
 
-    function handleSubmit () { }
+    async function handleSubmit () {
+      try {
+        state.isLoading = true
+        const { data, errors } = await services.auth.login({
+          email: state.email.value,
+          password: state.password.value
+        })
+
+        if (!errors) {
+          // O tocken é retornado a partir do POST de LOGIN < para verificar = npm run container (Docker) + Postman
+          window.localStorage.setItem('token', data.token)
+          router.push({ name: 'Feedbacks' })
+          state.isLoading = false
+          modal.close()
+
+          return
+        }
+
+        if (errors.status === 400) {
+
+        } if (errors.status === 401) {
+
+        } if (errors.status === 404) {
+
+        }
+
+        state.isLoading = false
+      } catch (error) {
+        state.isLoading = false
+        state.hasErrors = error
+      }
+    }
 
     return {
       state,
